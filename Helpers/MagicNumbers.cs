@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UEKH3
+namespace UE
 {
     public class MagicNumbers
     {

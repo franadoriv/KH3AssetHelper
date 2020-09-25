@@ -4,9 +4,9 @@
 // MVID: E2D17942-E9F2-4CD8-8DC3-683E9AA1D216
 // Assembly location: C:\Users\Adolfo\Desktop\New folder\kh3.exe
 
-namespace UEKH3.UE4
+namespace UE.UE4
 {
-  public class texparam
+  public class TexParam
   {
     public int type;
     public string value;

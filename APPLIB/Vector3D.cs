@@ -10,9 +10,10 @@ namespace APPLIB
 {
   public class Vector3D
   {
-    public float X;
-    public float Y;
-    public float Z;
+    public float X { get; set; }
+    public float Y { get; set; }
+    public float Z { get; set; }
+        
     public static readonly Vector3D UnitX = new Vector3D(1f, 0.0f, 0.0f);
     public static readonly Vector3D UnitY = new Vector3D(0.0f, 1f, 0.0f);
     public static readonly Vector3D UnitZ = new Vector3D(0.0f, 0.0f, 1f);

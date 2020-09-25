@@ -4,9 +4,9 @@
 // MVID: E2D17942-E9F2-4CD8-8DC3-683E9AA1D216
 // Assembly location: C:\Users\Adolfo\Desktop\New folder\kh3.exe
 
-namespace UEKH3
+namespace UE
 {
-  public class prop
+  public class Prop
   {
     public string name;
     public string type;

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace UEKH3.UE4
+namespace UE.UE4
 {
     public class MaterialDB
     {
-        public Dictionary<string, int> dictionary2 = new Dictionary<string, int>();
-        public Dictionary<string, int> dictionary3 = new Dictionary<string, int>();
+        public Dictionary<string, int> countListA = new Dictionary<string, int>();
+        public Dictionary<string, int> countListB = new Dictionary<string, int>();
         public List<string> stringList3 = new List<string>();
-        public List<List<texparam>> texparamListList = new List<List<texparam>>();
+        public List<List<TexParam>> texparamListList = new List<List<TexParam>>();
+        public Dictionary<string, string[]> meshXMaterials = new Dictionary<string, string[]>();
 
         public void Load(string maerialDbFilePath)
         {
@@ -20,20 +21,20 @@ namespace UEKH3.UE4
                 var br = new BinaryReader(fileStream);
                 int num1 = br.ReadInt32();
                 for (int index = 0; index < num1; ++index)
-                    dictionary2.Add(Utilities.readnamef(br), dictionary2.Count);
+                    countListA.Add(Utilities.readnamef(br), countListA.Count);
                 int num2 = br.ReadInt32();
                 for (int index = 0; index < num2; ++index)
                 {
                     string key = Utilities.readnamef(br);
-                    dictionary3.Add(key, dictionary3.Count);
+                    countListB.Add(key, countListB.Count);
                     stringList3.Add(key);
                 }
-                for (int index1 = 0; index1 < dictionary2.Count; ++index1)
+                for (int index1 = 0; index1 < countListA.Count; ++index1)
                 {
                     int num3 = br.ReadInt32();
-                    List<texparam> texparamList = new List<texparam>();
+                    List<TexParam> texparamList = new List<TexParam>();
                     for (int index2 = 0; index2 < num3; ++index2)
-                        texparamList.Add(new texparam()
+                        texparamList.Add(new TexParam()
                         {
                             type = (int)br.ReadByte(),
                             value = Utilities.readnamef(br)

@@ -2,13 +2,13 @@
 using System.IO;
 
 
-namespace UEKH3.UE4
+namespace UE.UE4
 {
     public class BlueprintDB
     {
         public Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
-        public List<List<string>> stringListList1 = new List<List<string>>();
-        public List<List<string>> stringListList2 = new List<List<string>>();
+        public List<List<string>> countListA = new List<List<string>>();
+        public List<List<string>> countListB = new List<List<string>>();
         private string bpPath;
 
         public void Load(string bpPath)
@@ -27,12 +27,12 @@ namespace UEKH3.UE4
                     List<string> stringList1 = new List<string>();
                     for (int index2 = 0; index2 < num2; ++index2)
                         stringList1.Add(Utilities.readnamef(br));
-                    stringListList1.Add(stringList1);
+                    countListA.Add(stringList1);
                     int num3 = br.ReadInt32();
                     List<string> stringList2 = new List<string>();
                     for (int index2 = 0; index2 < num3; ++index2)
                         stringList2.Add(Utilities.readnamef(br));
-                    stringListList2.Add(stringList2);
+                    countListB.Add(stringList2);
                 }
                 fileStream.Close();
             }
@@ -51,14 +51,14 @@ namespace UEKH3.UE4
             }
             for (int index = 0; index < dictionary1.Count; ++index)
             {
-                binaryWriter1.Write(stringListList1[index].Count);
-                foreach (string str in stringListList1[index])
+                binaryWriter1.Write(countListA[index].Count);
+                foreach (string str in countListA[index])
                 {
                     binaryWriter1.Write(str.Length);
                     binaryWriter1.Write(str.ToCharArray());
                 }
-                binaryWriter1.Write(stringListList2[index].Count);
-                foreach (string str in stringListList2[index])
+                binaryWriter1.Write(countListB[index].Count);
+                foreach (string str in countListB[index])
                 {
                     binaryWriter1.Write(str.Length);
                     binaryWriter1.Write(str.ToCharArray());

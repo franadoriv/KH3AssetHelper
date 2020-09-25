@@ -1,0 +1,51 @@
+import os
+import bpy
+import sys
+import math
+from bpy.props import *
+if '--' in sys.argv:
+    argv = sys.argv[sys.argv.index('--') + 1:]
+
+print(argv)
+
+srcPath=argv[0]
+dstPath=argv[1]
+
+print("srcPath: " + srcPath)
+print("dstPath: " + dstPath)
+
+context = bpy.context
+scene = context.scene
+
+#clear the scene
+for c in scene.collection.children:
+    scene.collection.children.unlink(c)
+
+# put the location to the folder where the plys are located here in this fashion
+#error_file = parent_path + '\\' + os.path.basename(folder_path) + '.errors.txt'
+
+#ef = None
+try:
+    bpy.ops.wm.read_homefile(use_empty=True)
+    if not os.path.exists(dstPath):
+        # import ascii into the scene
+        bpy.ops.xps_tools.import_model(filepath = srcPath)
+        # select all
+        #bpy.ops.object.select_all(action="SELECT")
+        # fix rotation
+        #bpy.ops.transform.rotate(value=-1.58, orient_axis='X')
+        # fix size
+        #bpy.ops.transform.resize(value=(0.01, 0.01, 0.01))
+        # export current scene to an fbx file
+        bpy.ops.export_scene.fbx(filepath = dstPath)
+        # delete the object from the scene
+        #bpy.ops.object.delete()
+except Exception as e: 
+    print(e)
+#   if ef is None:
+#       ef = open(error_file, 'a+')
+#   ef.write(e)   
+    pass
+#if ef is not None:
+#    ef.close()
+exit()
