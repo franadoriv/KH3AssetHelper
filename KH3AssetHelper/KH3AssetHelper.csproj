@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
@@ -12,6 +12,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DDSReader" Version="1.0.8-pre" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationCore">
@@ -32,10 +37,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DDSReader" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

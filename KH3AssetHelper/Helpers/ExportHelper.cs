@@ -356,27 +356,27 @@ namespace KH3AssetHelper.Helpers
             var aes = "1u3t4WOI0bN6Gvz76w9GR0nWTc23lWQ8eE2MFJw3fSbupa5SD735c8bsOa1nY2V";
 
             var gameDir = $"{dstPath}/Game";
-            var anmDir = @$"{dstPath}/anm";
-            var skMeshDir = @$"{dstPath}/skMdl";
-            var stMeshDir = @$"{dstPath}/stMdl";
-            var texDir = @$"{dstPath}/tex";
+            var anmDir = $@"{dstPath}/anm";
+            var skMeshDir = $@"{dstPath}/skMdl";
+            var stMeshDir = $@"{dstPath}/stMdl";
+            var texDir = $@"{dstPath}/tex";
             DirectoryHelper.CreateIfNotExist(gameDir, true);
             DirectoryHelper.CreateIfNotExist(anmDir, false);
             DirectoryHelper.CreateIfNotExist(skMeshDir, false);
             DirectoryHelper.CreateIfNotExist(stMeshDir, false);
             DirectoryHelper.CreateIfNotExist(texDir, false);
      
-            Action<string> Export = (string partialRoute) => {
+            Action<string> Export = (string partialRoute2) => {
                 Process.Start(new ProcessStartInfo() {
                     Verb = "runas",
                     FileName = @"K:\GameRipping\Tools\umodel_win32\umodel.exe",
-                    Arguments = $"-path=\"{root}\"  -notgacomp -game=kh3 -ps4 -nooverwrite -aes={aes} -export \"{partialRoute}\" -out=\"{dstPath}\""
+                    Arguments = $"-path=\"{root}\"  -notgacomp -game=kh3 -ps4 -nooverwrite -aes={aes} -export \"{partialRoute2}\" -out=\"{dstPath}\""
                 }).WaitForExit();
             };
             Export(partialRoute);
 
             foreach (string filePath in Directory.GetFiles(gameDir, "*.pskx", SearchOption.AllDirectories)) {
-                var fileDst = @$"{stMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
+                var fileDst = $@"{stMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
                 if (!File.Exists(fileDst)) {
                     var fixedExt = Path.ChangeExtension(filePath, ".psk");
                     File.Move(filePath, fixedExt);
@@ -385,21 +385,21 @@ namespace KH3AssetHelper.Helpers
             }
 
             foreach (string filePath in Directory.GetFiles(gameDir, "*.psk", SearchOption.AllDirectories)) {
-                var fileDst = @$"{skMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
+                var fileDst = $@"{skMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
                 if (!File.Exists(fileDst)) {
                     NoesisConvert(filePath, fileDst);
                 }
             }
 
             foreach (string filePath in Directory.GetFiles(gameDir, "*.psa", SearchOption.AllDirectories)) {
-                var fileDst = @$"{anmDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
+                var fileDst = $@"{anmDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
                 if (!File.Exists(fileDst)) {
                     NoesisConvert(filePath, fileDst);
                 }
             }
 
             foreach (string filePath in Directory.GetFiles(gameDir, "*.tga", SearchOption.AllDirectories)) {
-                var fileDst = @$"{texDir}/{Path.GetFileNameWithoutExtension(filePath)}.tga";
+                var fileDst = $@"{texDir}/{Path.GetFileNameWithoutExtension(filePath)}.tga";
                 if (!File.Exists(fileDst)) 
                     File.Move(filePath, fileDst);
             }
