@@ -14,7 +14,7 @@ namespace UE {
     public class UAssetParser
     {
         public UAParserConfig config = new UAParserConfig();
- 
+
         private int game = 0;
         private string[] names = new string[] { };
         private string[] expnames = new string[] { };
@@ -25,7 +25,7 @@ namespace UE {
         public bool exportLights = false;
         public bool exportMaps = false;
         NumberFormatInfo numberFormatInfo = new NumberFormatInfo();
-        public Action<string> OnDebugMessage=null;
+        public Action<string> OnDebugMessage = null;
 
         public UAssetParser(UAParserConfig config)
         {
@@ -53,11 +53,11 @@ namespace UE {
             blueprintDB = new BlueprintDB(config.BlueprintDBPath);
             materialDB = new MaterialDB(config.MaterialDBPath);
         }
-        
+
         public UAssetParserResult ParseUAsset(string path)
         {
             var result = new UAssetParserResult(ref this.config);
-            
+
             //string localPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
             var uassetList = new List<string>();
             if (!string.IsNullOrEmpty(path))
@@ -79,7 +79,7 @@ namespace UE {
             var uAssetsList = new List<UAsset>();
             if (args == null)
                 args = new string[] { };
-            
+
             numberFormatInfo.NumberDecimalSeparator = ".";
             var mn = new MagicNumbers();
             bool saveBPDB = false;
@@ -88,7 +88,8 @@ namespace UE {
             var hasArgs = false;
             MemoryStream fs;
             BinaryReader br;
-            var texDirFiles = Directory.GetFiles(this.config.TexturesFolder);
+            //var texDirFiles = Directory.GetFiles(this.config.TexturesFolder);
+            var texDirFiles = new List<string>();
             foreach (var uassetPath in uAssetsPaths)
             {
                 var uAsset = new UAsset(Path.GetFileNameWithoutExtension(uassetPath));
@@ -127,20 +128,20 @@ namespace UE {
 
                     fs = new MemoryStream(buffer1);
                     br = new BinaryReader(fs);
-   
+
                     StreamWriter namesStreamWriter = null;
                     StreamWriter exportStreamWriter = null;
                     StreamWriter importStreamWriter = null;
 
-                   /* if (File.Exists(localPath + withoutExtension + "_lights.txt"))
-                        File.Delete(localPath + withoutExtension + "_lights.txt");
+                    /* if (File.Exists(localPath + withoutExtension + "_lights.txt"))
+                         File.Delete(localPath + withoutExtension + "_lights.txt");
 
-                    if (hasArgs)
-                    {
-                        namesStreamWriter = new StreamWriter(localPath + withoutExtension + ".names.txt");
-                        exportStreamWriter = new StreamWriter(localPath + withoutExtension + ".export.txt");
-                        importStreamWriter = new StreamWriter(localPath + withoutExtension + ".import.txt");
-                    }*/
+                     if (hasArgs)
+                     {
+                         namesStreamWriter = new StreamWriter(localPath + withoutExtension + ".names.txt");
+                         exportStreamWriter = new StreamWriter(localPath + withoutExtension + ".export.txt");
+                         importStreamWriter = new StreamWriter(localPath + withoutExtension + ".import.txt");
+                     }*/
 
 
                     fs.Seek(20L, SeekOrigin.Begin);
@@ -253,7 +254,7 @@ namespace UE {
                         br.ReadInt32();
                         this.expnames[index2] = this.names[br.ReadInt32()];
                         //UNUSED
-                        
+
                         int num5 = br.ReadInt32();
                         if (num5 > 0)
                         {
@@ -292,11 +293,11 @@ namespace UE {
                     }
                     #endregion
 
-                    
+
                     var dictionary4 = new Dictionary<int, int>();
                     var dictionary5 = new Dictionary<int, int>();
-                    
-                    
+
+
                     int num10 = 0;
 
                     #region Actors
@@ -326,8 +327,8 @@ namespace UE {
                             int num6 = br.ReadInt32();
                             if (exportTextures)
                             {
-                               // if (!Directory.Exists("textures"))
-                                 //   Directory.CreateDirectory("textures");
+                                // if (!Directory.Exists("textures"))
+                                //   Directory.CreateDirectory("textures");
                                 if (!File.Exists($"{config.TexturesFolder}\\{textureOutName}"))
                                 {
                                     DebugWriteLine("Exporting texture: " + this.expnames[expNameIndex]);
@@ -433,7 +434,7 @@ namespace UE {
                                     actor.relativeRotation = new Vector3D(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                                 }
                                 else if (prop.type == "ObjectProperty" && prop.name == "AttachParent")
-                                    actor.attachParent = prop.ivalue;
+                                    actor.attachParentDicIdx = prop.ivalue;
                             }
                             if (exportLights)
                             {
@@ -505,8 +506,8 @@ namespace UE {
                             }
                             if (num4 != 0)
                             {
-                               // if (!Directory.Exists("skeletalmesh"))
-                               ///     Directory.CreateDirectory("skeletalmesh");
+                                // if (!Directory.Exists("skeletalmesh"))
+                                ///     Directory.CreateDirectory("skeletalmesh");
                                 StreamWriter SW_SKM_SMD = new StreamWriter("skeletalmesh\\" + expname + ".smd");
                                 int length3 = br.ReadInt32();
                                 Quaternion3D q = new Quaternion3D();
@@ -628,7 +629,7 @@ namespace UE {
                             StreamWriter SW_SKM_RAW_TXT = new StreamWriter($"{config.StaticMeshRawFolder}\\{expname}.txt");
                             foreach (string materialName in strArray1)
                             {
-                               //TODO:In this point you should save the materials in the actor
+                                //TODO:In this point you should save the materials in the actor
                                 SW_SKM_RAW_TXT.WriteLine(materialName);
                             }
                             SW_SKM_RAW_TXT.Close();
@@ -918,7 +919,7 @@ namespace UE {
                         {
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist = new List<Prop>();
-                            Utilities.readprops(plist, fs, br,names);
+                            Utilities.readprops(plist, fs, br, names);
                             br.ReadInt32();
                             int num4 = br.ReadInt32();
                             fs.Seek((long)(18 * num4), SeekOrigin.Current);
@@ -933,7 +934,7 @@ namespace UE {
                                 if (prop.type == "ObjectProperty" && prop.name == "StaticMesh")
                                     ISMCActor.staticMeshFile = prop.ivalue >= 0 ? this.expnames[prop.ivalue] : this.impnames[-prop.ivalue];
                                 else if (prop.type == "ObjectProperty" && prop.name == "AttachParent")
-                                    ISMCActor.attachParent = prop.ivalue;
+                                    ISMCActor.attachParentDicIdx = prop.ivalue;
                                 else if (prop.type == "StructProperty" && prop.name == "RelativeLocation")
                                 {
                                     fs.Seek(prop.fpos, SeekOrigin.Begin);
@@ -955,7 +956,8 @@ namespace UE {
                             {
                                 ISMCActor.hastrans = true;
                                 ISMCActor.tm = new float[5, 4];
-                                for (int i = 0; i < 5; ++i) {
+                                for (int i = 0; i < 5; ++i)
+                                {
                                     for (int k = 0; k < 4; ++k)
                                         ISMCActor.tm[i, k] = br.ReadSingle();
                                 }
@@ -966,7 +968,7 @@ namespace UE {
                         {
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist1 = new List<Prop>();
-                            Utilities.readprops(plist1, fs, br,names);
+                            Utilities.readprops(plist1, fs, br, names);
                             if (!Directory.Exists("materials"))
                                 Directory.CreateDirectory("materials");
                             StreamWriter SW_MAT_TXT = new StreamWriter("materials\\" + withoutExtension + ".txt");
@@ -986,7 +988,7 @@ namespace UE {
                                     for (impIndex = 0; impIndex < num4; ++impIndex)
                                     {
                                         List<Prop> plist2 = new List<Prop>();
-                                        Utilities.readprops(plist2, fs, br,names);
+                                        Utilities.readprops(plist2, fs, br, names);
                                         int num5 = 0;
                                         string str2 = "";
                                         foreach (Prop prop2 in plist2)
@@ -1023,7 +1025,7 @@ namespace UE {
                                     for (impIndex = 0; impIndex < num4; ++impIndex)
                                     {
                                         List<Prop> plist2 = new List<Prop>();
-                                        Utilities.readprops(plist2, fs, br,names);
+                                        Utilities.readprops(plist2, fs, br, names);
                                         Utilities.Printprops(plist2, fs, br, SW_MAT_TXT);
                                         SW_MAT_TXT.WriteLine();
                                     }
@@ -1041,7 +1043,7 @@ namespace UE {
                         {
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist = new List<Prop>();
-                            Utilities.readprops(plist, fs, br,names);
+                            Utilities.readprops(plist, fs, br, names);
                             ULand land = new ULand();
                             foreach (Prop prop in plist)
                             {
@@ -1065,14 +1067,14 @@ namespace UE {
                         {
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist = new List<Prop>();
-                            Utilities.readprops(plist, fs, br,names);
+                            Utilities.readprops(plist, fs, br, names);
                             var actor = new UStaticMeshActor();
                             foreach (Prop prop in plist)
                             {
                                 if (prop.type == "ObjectProperty" && prop.name == "StaticMesh")
                                     actor.staticMeshFile = prop.ivalue >= 0 ? this.expnames[prop.ivalue] : this.impnames[-prop.ivalue];
                                 else if (prop.type == "ObjectProperty" && prop.name == "AttachParent")
-                                    actor.attachParent = prop.ivalue;
+                                    actor.attachParentDicIdx = prop.ivalue;
                                 else if (prop.type == "StructProperty" && prop.name == "RelativeLocation")
                                 {
                                     fs.Seek(prop.fpos, SeekOrigin.Begin);
@@ -1108,7 +1110,7 @@ namespace UE {
                             DebugWriteLine("Exporting staticmesh: " + this.expnames[expNameIndex]);
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist1 = new List<Prop>();
-                            Utilities.readprops(plist1, fs, br,names);
+                            Utilities.readprops(plist1, fs, br, names);
                             string[] matNames = (string[])null;
                             foreach (Prop prop1 in plist1)
                             {
@@ -1132,7 +1134,7 @@ namespace UE {
                                     for (impIndex = 0; impIndex < length2; ++impIndex)
                                     {
                                         List<Prop> plist2 = new List<Prop>();
-                                        Utilities.readprops(plist2, fs, br,names);
+                                        Utilities.readprops(plist2, fs, br, names);
                                         foreach (Prop prop2 in plist2)
                                         {
                                             if (prop2.name == "MaterialInterface")
@@ -1146,7 +1148,7 @@ namespace UE {
                             string expname = this.expnames[expNameIndex];
                             materialDB.meshXMaterials[expname] = matNames;
                             //if (!Directory.Exists("staticmesh.raw"))
-                              //  Directory.CreateDirectory("staticmesh.raw");
+                            //  Directory.CreateDirectory("staticmesh.raw");
                             int count3 = (int)((long)(numArray1[expNameIndex] + numArray2[expNameIndex]) - fs.Position);
                             byte[] numArray3 = new byte[count3];
                             fs.Read(numArray3, 0, count3);
@@ -1333,23 +1335,23 @@ namespace UE {
                         }
                         else if (this.blueprintDB.dictionary1.ContainsKey(namesList[expNameIndex]))
                         {
-                            int index3 = 0;
-                            int index4 = 0;
+                            int skeletalMeshComponentIdx = 0;
+                            int staticMeshComponentIdx = 0;
                             fs.Seek((long)numArray1[expNameIndex], SeekOrigin.Begin);
                             List<Prop> plist1 = new List<Prop>();
-                            Utilities.readprops(plist1, fs, br,names);
+                            Utilities.readprops(plist1, fs, br, names);
                             foreach (Prop prop in plist1)
                             {
                                 if (prop.name == "SkeletalMeshComponent")
-                                    index3 = prop.ivalue;
+                                    skeletalMeshComponentIdx = prop.ivalue;
                                 else if (prop.name == "StaticMeshComponent")
-                                    index4 = prop.ivalue;
+                                    staticMeshComponentIdx = prop.ivalue;
                             }
-                            if (index4 != 0)
+                            if (staticMeshComponentIdx != 0)
                             {
-                                fs.Seek((long)numArray1[index4], SeekOrigin.Begin);
+                                fs.Seek((long)numArray1[staticMeshComponentIdx], SeekOrigin.Begin);
                                 List<Prop> plist2 = new List<Prop>();
-                                Utilities.readprops(plist2, fs, br,names);
+                                Utilities.readprops(plist2, fs, br, names);
                                 UActor actor = new UActor();
                                 if (!dictionary4.ContainsKey(expNameIndex))
                                     dictionary4.Add(expNameIndex, uAsset.staticMeshActorList.Count);
@@ -1379,11 +1381,11 @@ namespace UE {
                                         relativeScale3D = actor.relativeScale3D,
                                     });
                             }
-                            if (index3 != 0)
+                            if (skeletalMeshComponentIdx != 0)
                             {
-                                fs.Seek((long)numArray1[index3], SeekOrigin.Begin);
+                                fs.Seek((long)numArray1[skeletalMeshComponentIdx], SeekOrigin.Begin);
                                 List<Prop> plist2 = new List<Prop>();
-                                Utilities.readprops(plist2, fs, br,names);
+                                Utilities.readprops(plist2, fs, br, names);
                                 UActor actor = new UActor();
                                 if (!dictionary5.ContainsKey(expNameIndex))
                                     dictionary5.Add(expNameIndex, uAsset.staticSkeletalMeshActorList.Count);
@@ -1420,11 +1422,17 @@ namespace UE {
                     importStreamWriter?.Close();
                     #endregion
 
+                    uAsset.staticMeshActorList.ForEach(actor => {
+                        if (actor.attachParentDicIdx > -1)
+                            actor.attachParent = dictionary4[actor.attachParentDicIdx];
+                    });
 
-                    ExportAll(withoutExtension,impIndex,numArray1,dictionary4,dictionary5,uAsset,fs,br,uAsset.uMaterials);
-                    uAsset.uMaterials.Keys.ToList().ForEach(textureBaseName => {
+                    ExportAll(withoutExtension, impIndex, numArray1, dictionary4, dictionary5, uAsset, fs, br, uAsset.uMaterials);
+                    uAsset.uMaterials.Keys.ToList().ForEach(textureBaseName =>
+                    {
                         var m = uAsset.uMaterials[textureBaseName];
-                        m.texturesList = texDirFiles.Where(texPath => {
+                        m.texturesList = texDirFiles.Where(texPath =>
+                        {
                             var fName = Path.GetFileName(texPath);
                             var A = fName.Left(m.textureBaseName.Length + 1);
                             var B = $"{m.textureBaseName}_";
@@ -1432,7 +1440,7 @@ namespace UE {
                         }).Select(Path.GetFileNameWithoutExtension).ToList();
                     });
 
-                    for(var i=0;i<uAsset.staticMeshActorList.Count(); i++) 
+                    for (var i = 0; i < uAsset.staticMeshActorList.Count(); i++)
                         uAsset.staticMeshActorList[i].id = $"{uAsset.staticMeshActorList[i].name}_{i}";
 
                     uAssetsList.Add(uAsset);
@@ -1440,7 +1448,7 @@ namespace UE {
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error exporting asset " + uassetPath + "\r\n" + ex.Message + "\r\n" + ex.StackTrace);
-                }                
+                }
             }
             //FOREACH END
 
@@ -1491,7 +1499,7 @@ namespace UE {
             UAsset uAsset,
             MemoryStream fs,
             BinaryReader br,
-            Dictionary<string,UMaterial> uMaterialsDic)
+            Dictionary<string, UMaterial> uMaterialsDic)
         {
             var intSet1 = new HashSet<int>();
             #region LandMap
@@ -1608,9 +1616,9 @@ namespace UE {
             }
 
             //This for get all sub meshes    
-            for(var n = 0; n <uAsset.staticMeshActorList.Count; n++)
-                FillActorSubMeshes(uAsset.staticMeshActorList, n, dictionary4,ref uMaterialsDic);
-            
+            for (var n = 0; n < uAsset.staticMeshActorList.Count; n++)
+                FillActorSubMeshes(uAsset.staticMeshActorList, n, dictionary4, ref uMaterialsDic);
+
 
             return;
 
@@ -1620,7 +1628,8 @@ namespace UE {
 
             StreamWriter SW_MAP_ASCII = null;
 
-            if (exportMaps) { 
+            if (exportMaps)
+            {
                 //Fill maps statick meshes
                 foreach (UStaticMeshActor actor in uAsset.staticMeshActorList)
                 {
@@ -1742,7 +1751,7 @@ namespace UE {
                                         }
                                     }
                                 }
-                                for (; index3 >= 0; index3 = uAsset.staticMeshActorList[index3].attachParent < 0 || !dictionary4.ContainsKey(uAsset.staticMeshActorList[index3].attachParent) ? -1 : dictionary4[uAsset.staticMeshActorList[index3].attachParent])
+                                for (; index3 >= 0; index3 = uAsset.staticMeshActorList[index3].attachParentDicIdx < 0 || !dictionary4.ContainsKey(uAsset.staticMeshActorList[index3].attachParentDicIdx) ? -1 : dictionary4[uAsset.staticMeshActorList[index3].attachParentDicIdx])
                                 {
                                     Quaternion3D quaternion = C3D.EulerAnglesToQuaternion(uAsset.staticMeshActorList[index3].relativeRotation.X, uAsset.staticMeshActorList[index3].relativeRotation.Y, uAsset.staticMeshActorList[index3].relativeRotation.Z);
                                     Quaternion3D quaternion3D1 = Quaternion3D.Invert(quaternion);
@@ -1871,7 +1880,7 @@ namespace UE {
                                     SW_MAP_ASCII.WriteLine("0");
                                 }
                                 SW_MAP_ASCII.WriteLine(numArray8[impIndex] - numArray7[impIndex] + 1);
-                                
+
                                 //This contains the vertices position
                                 for (int index3 = numArray7[impIndex]; index3 <= numArray8[impIndex]; ++index3)
                                 {
@@ -1956,7 +1965,7 @@ namespace UE {
                 }
             }
             #endregion
-            
+
             #region SkyMap
             StreamWriter SW_SKMMAP_ASCII = null;
             int num35 = 0;
@@ -2096,7 +2105,7 @@ namespace UE {
                                     }
                                 }
                             }
-                            for (; index3 >= 0; index3 = uAsset.staticSkeletalMeshActorList[index3].attachParent < 0 || !dictionary4.ContainsKey(uAsset.staticSkeletalMeshActorList[index3].attachParent) ? -1 : dictionary4[uAsset.staticSkeletalMeshActorList[index3].attachParent])
+                            for (; index3 >= 0; index3 = uAsset.staticSkeletalMeshActorList[index3].attachParentDicIdx < 0 || !dictionary4.ContainsKey(uAsset.staticSkeletalMeshActorList[index3].attachParentDicIdx) ? -1 : dictionary4[uAsset.staticSkeletalMeshActorList[index3].attachParentDicIdx])
                             {
                                 Quaternion3D quaternion = C3D.EulerAnglesToQuaternion(uAsset.staticSkeletalMeshActorList[index3].relativeRotation.X, uAsset.staticSkeletalMeshActorList[index3].relativeRotation.Y, uAsset.staticSkeletalMeshActorList[index3].relativeRotation.Z);
                                 Quaternion3D quaternion3D1 = Quaternion3D.Invert(quaternion);
@@ -2283,17 +2292,17 @@ namespace UE {
                 };
                 for (int index2 = 0; index2 < 4; ++index2)
                     vector3DArray[index2] += actor.relativeLocation;
-                if (actor.attachParent >= 0)
+                if (actor.attachParentDicIdx >= 0)
                 {
-                    if (dictionary4.ContainsKey(actor.attachParent))
+                    if (dictionary4.ContainsKey(actor.attachParentDicIdx))
                     {
                         for (int index2 = 0; index2 < 4; ++index2)
-                            vector3DArray[index2] += uAsset.staticMeshActorList[dictionary4[actor.attachParent]].relativeLocation;
+                            vector3DArray[index2] += uAsset.staticMeshActorList[dictionary4[actor.attachParentDicIdx]].relativeLocation;
                     }
-                    if (dictionary5.ContainsKey(actor.attachParent))
+                    if (dictionary5.ContainsKey(actor.attachParentDicIdx))
                     {
                         for (int index2 = 0; index2 < 4; ++index2)
-                            vector3DArray[index2] += uAsset.staticSkeletalMeshActorList[dictionary5[actor.attachParent]].relativeLocation;
+                            vector3DArray[index2] += uAsset.staticSkeletalMeshActorList[dictionary5[actor.attachParentDicIdx]].relativeLocation;
                     }
                 }
                 ++num37;
@@ -2339,7 +2348,7 @@ namespace UE {
 
         }
 
-        void FillActorSubMeshes(List<UStaticMeshActor> staticMeshActorList, int actorIndex, Dictionary<int, int> dictionary4,ref Dictionary<string, UMaterial> uMaterialsDic)
+        void FillActorSubMeshes(List<UStaticMeshActor> staticMeshActorList, int actorIndex, Dictionary<int, int> dictionary4, ref Dictionary<string, UMaterial> uMaterialsDic)
         {
 
             var actor = staticMeshActorList[actorIndex];
@@ -2452,7 +2461,7 @@ namespace UE {
                                 }
                             }
                         }
-                        for (; index3 >= 0; index3 = staticMeshActorList[index3].attachParent < 0 || !dictionary4.ContainsKey(staticMeshActorList[index3].attachParent) ? -1 : dictionary4[staticMeshActorList[index3].attachParent])
+                        for (; index3 >= 0; index3 = staticMeshActorList[index3].attachParentDicIdx < 0 || !dictionary4.ContainsKey(staticMeshActorList[index3].attachParentDicIdx) ? -1 : dictionary4[staticMeshActorList[index3].attachParentDicIdx])
                         {
                             Quaternion3D quaternion = C3D.EulerAnglesToQuaternion(staticMeshActorList[index3].relativeRotation.X, staticMeshActorList[index3].relativeRotation.Y, staticMeshActorList[index3].relativeRotation.Z);
                             Quaternion3D quaternion3D1 = Quaternion3D.Invert(quaternion);
@@ -2536,20 +2545,23 @@ namespace UE {
                         for (var impIndex = 0; impIndex < length2; ++impIndex)
                             subMeshMaterialNames[impIndex] = "Submesh_" + (impIndex) + "_material";
                     }
-                    for (var impIndex = 0; impIndex < length2; ++impIndex) {
+                    for (var impIndex = 0; impIndex < length2; ++impIndex)
+                    {
                         var material = new UMaterial() { id = $"{actor.staticMeshFile}_{impIndex}" };
-                        if (staticMeshRaTxtExist) {
+                        if (staticMeshRaTxtExist)
+                        {
                             material.name = subMeshMaterialNames[numArray3[impIndex]];
                             material.textureBaseName = $"T_{material.name.Substring(3)}";
                         }
-                        else {
+                        else
+                        {
                             material.name = subMeshMaterialNames[impIndex];
                             material.textureBaseName = $"T_{material.name.Substring(3)}";
                         }
                         actor.materials.Add(material.name);
-                        if (!uMaterialsDic.ContainsKey(material.name)) 
+                        if (!uMaterialsDic.ContainsKey(material.name))
                             uMaterialsDic.Add(material.name, material);
-                        
+
                         #endregion
                     }
 

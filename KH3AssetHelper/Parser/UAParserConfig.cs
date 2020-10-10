@@ -14,5 +14,7 @@ namespace UE
         public string ExportFolder = "";
         public string TempFolder = "temp";
         public string BlenderPath = "";
+        public string NoesisPath = "";
+        public string UModelPath = "";
     }
 }

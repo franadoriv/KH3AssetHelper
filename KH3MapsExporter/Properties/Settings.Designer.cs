@@ -58,5 +58,41 @@ namespace KH3MapsExporter.Properties {
                 this["TempPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GamePath {
+            get {
+                return ((string)(this["GamePath"]));
+            }
+            set {
+                this["GamePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MaterialDBPath {
+            get {
+                return ((string)(this["MaterialDBPath"]));
+            }
+            set {
+                this["MaterialDBPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BlueprintDBPath {
+            get {
+                return ((string)(this["BlueprintDBPath"]));
+            }
+            set {
+                this["BlueprintDBPath"] = value;
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ using UE.UE4;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Linq;
+using System.Runtime;
 
 namespace KH3AssetHelper.Helpers
 {
@@ -317,10 +318,32 @@ namespace KH3AssetHelper.Helpers
                 process.WaitForExit();
                 Console.Write($"OK");
             }
+       }
+
+        public static void BlenderPSK2FBX(string srcPath, string dstPath,string blenderPath) {
+            if (!File.Exists(dstPath)) {
+                string tempPath = Path.GetTempPath();
+                string scriptPath = $"{tempPath}/BlenderScript_PSK2FBX.py";
+                string pluginPath = $"{tempPath}/pskpsab280.py";
+                if (File.Exists(scriptPath))
+                    File.Delete(scriptPath);
+                if (File.Exists(pluginPath))
+                    File.Delete(pluginPath);
+                File.WriteAllText(scriptPath, Resources.BlenderScript_PSK2FBX);
+                File.WriteAllText(pluginPath, Encoding.Default.GetString(Resources.pskpsab280));
+                string strCmdText = $"'/C \"{blenderPath}\" --python {scriptPath} --background -- \"{srcPath}\" \"{dstPath}\" \"{pluginPath}\" '";
+                Console.WriteLine($"CMD.exe {strCmdText}");
+                var startInfo = new ProcessStartInfo();
+                startInfo.FileName = blenderPath;
+                startInfo.Arguments = $"--python \"{scriptPath}\" --background -- \"{srcPath}\" \"{dstPath}\" \"{pluginPath}\"";
+                var process = Process.Start(startInfo);
+                Console.WriteLine($"Waiting export... ");
+                process.WaitForExit();
+                Console.Write($"OK");
+            }
         }
 
-       public static void NoesisConvert(string srcPath,string dstPath) {
-            var noesisPath = @"K:\GameRipping\Tools\noesisv4431\Noesis.exe";
+       public static void NoesisConvert(string srcPath,string dstPath,string noesisPath) {
             Process.Start(new ProcessStartInfo() {
                 Verb = "runas",
                 FileName = noesisPath,
@@ -352,7 +375,7 @@ namespace KH3AssetHelper.Helpers
             File.WriteAllText(dstPath, strJsn);
         }
 
-        public static void uModelConvert (string root, string partialRoute,string dstPath) {
+        public static void uModelConvert (string root, string partialRoute,string dstPath,string uModelPath,string noesisPath,string blenderPath) {
             var aes = "1u3t4WOI0bN6Gvz76w9GR0nWTc23lWQ8eE2MFJw3fSbupa5SD735c8bsOa1nY2V";
 
             var gameDir = $"{dstPath}/Game";
@@ -360,7 +383,7 @@ namespace KH3AssetHelper.Helpers
             var skMeshDir = $@"{dstPath}/skMdl";
             var stMeshDir = $@"{dstPath}/stMdl";
             var texDir = $@"{dstPath}/tex";
-            DirectoryHelper.CreateIfNotExist(gameDir, true);
+            DirectoryHelper.CreateIfNotExist(gameDir, false);
             DirectoryHelper.CreateIfNotExist(anmDir, false);
             DirectoryHelper.CreateIfNotExist(skMeshDir, false);
             DirectoryHelper.CreateIfNotExist(stMeshDir, false);
@@ -369,32 +392,28 @@ namespace KH3AssetHelper.Helpers
             Action<string> Export = (string partialRoute2) => {
                 Process.Start(new ProcessStartInfo() {
                     Verb = "runas",
-                    FileName = @"K:\GameRipping\Tools\umodel_win32\umodel.exe",
-                    Arguments = $"-path=\"{root}\"  -notgacomp -game=kh3 -ps4 -nooverwrite -aes={aes} -export \"{partialRoute2}\" -out=\"{dstPath}\""
+                    FileName = uModelPath,
+                    Arguments = $"-path=\"{root}\"  -notgacomp -game=kh3 -ps4 -nooverwrite -aes={aes} -export \"{partialRoute2}\" -out=\"{gameDir}\""
                 }).WaitForExit();
             };
             Export(partialRoute);
-
+            
             foreach (string filePath in Directory.GetFiles(gameDir, "*.pskx", SearchOption.AllDirectories)) {
                 var fileDst = $@"{stMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
-                if (!File.Exists(fileDst)) {
-                    var fixedExt = Path.ChangeExtension(filePath, ".psk");
-                    File.Move(filePath, fixedExt);
-                    NoesisConvert(fixedExt, fileDst);
-                }
+                BlenderPSK2FBX(filePath, fileDst,blenderPath);
             }
 
-            foreach (string filePath in Directory.GetFiles(gameDir, "*.psk", SearchOption.AllDirectories)) {
+            /*foreach (string filePath in Directory.GetFiles(gameDir, "*.psk", SearchOption.AllDirectories)) {
                 var fileDst = $@"{skMeshDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
                 if (!File.Exists(fileDst)) {
-                    NoesisConvert(filePath, fileDst);
+                    NoesisConvert(filePath, fileDst, noesisPath);
                 }
-            }
+            }*/
 
             foreach (string filePath in Directory.GetFiles(gameDir, "*.psa", SearchOption.AllDirectories)) {
                 var fileDst = $@"{anmDir}/{Path.GetFileNameWithoutExtension(filePath)}.fbx";
                 if (!File.Exists(fileDst)) {
-                    NoesisConvert(filePath, fileDst);
+                    NoesisConvert(filePath, fileDst, noesisPath);
                 }
             }
 
@@ -406,13 +425,13 @@ namespace KH3AssetHelper.Helpers
         }
 
         public void uMapAssetExport(string root, UAsset uMapAsset, string dstPath) {
-            var metaPath = $"{dstPath}/map.json";
+            var metaPath = $"{dstPath}/{uMapAsset.name}.json";
             if (!File.Exists(metaPath))
                 uAsset2Json(uMapAsset, metaPath);
             var mapName = string.Join("_", uMapAsset.name.Split('_').Take(1));
-            uModelConvert(root, $"*/*SM_{mapName}_*.uasset", dstPath);
+            var blenderPath = @"C:\Program Files\Blender Foundation\Blender 2.90\blender.exe";
             Console.WriteLine($"MapName: {mapName}");
- 
+            uModelConvert(root, $"*/*SM_{mapName}_*.uasset", dstPath, uAssetParserResult.config.UModelPath, uAssetParserResult.config.NoesisPath, blenderPath);
             /*uMapAsset.staticMeshActorList.ForEach(actor => {
                 uModelConvert(root, $"/{actor.staticMesh}.uasset",dstPath);
             });*/

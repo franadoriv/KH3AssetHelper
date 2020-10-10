@@ -15,6 +15,7 @@ namespace UE {
         public Vector3D relativeLocation { get; set; }
         public Vector3D relativeRotation { get; set; }
         public Vector3D relativeScale3D { get; set; }
+        public int attachParentDicIdx { get; set; }
         public int attachParent { get; set; }
         public int[] overmat { get; set; }
         internal bool hastrans { get; set; }
@@ -26,7 +27,7 @@ namespace UE {
             this.relativeLocation = new Vector3D();
             this.relativeRotation = new Vector3D();
             this.relativeScale3D = new Vector3D(1f, 1f, 1f); ;
-            this.attachParent = -1;
+            this.attachParentDicIdx = -1;
         }
 
     }

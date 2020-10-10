@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.TRV_Maps = new System.Windows.Forms.TreeView();
@@ -35,12 +36,21 @@
             this.BTN_UViewerPath = new System.Windows.Forms.Button();
             this.BTN_NoesisPath = new System.Windows.Forms.Button();
             this.BTN_TempFolderPath = new System.Windows.Forms.Button();
+            this.BTN_GameFolderPath = new System.Windows.Forms.Button();
+            this.BTN_MaterialDBPath = new System.Windows.Forms.Button();
+            this.BTN_BlueprintDBPath = new System.Windows.Forms.Button();
             this.TXT_UVIewerPath = new System.Windows.Forms.TextBox();
             this.TXT_NoesisPath = new System.Windows.Forms.TextBox();
             this.TXT_TempFolderPath = new System.Windows.Forms.TextBox();
+            this.TXT_GameFolderPath = new System.Windows.Forms.TextBox();
+            this.TXT_MaterialDBPath = new System.Windows.Forms.TextBox();
+            this.TXT_BlueprintDBPath = new System.Windows.Forms.TextBox();
             this.LBL_UModelViewPath = new System.Windows.Forms.Label();
             this.LBL_NoesisPath = new System.Windows.Forms.Label();
             this.LBL_TempFolderPath = new System.Windows.Forms.Label();
+            this.LBL_CnfGameFolder = new System.Windows.Forms.Label();
+            this.LBL_MaterialDBPath = new System.Windows.Forms.Label();
+            this.LBL_BlueprintDBPath = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,6 +106,8 @@
             this.TRV_Maps.Name = "TRV_Maps";
             this.TRV_Maps.Size = new System.Drawing.Size(249, 396);
             this.TRV_Maps.TabIndex = 3;
+            this.TRV_Maps.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TRV_Maps_AfterSelect);
+            this.TRV_Maps.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TRV_Maps_RightClick);
             // 
             // CMB_MapsIDsList
             // 
@@ -160,60 +172,109 @@
             this.TBL_CnfOptions.Controls.Add(this.BTN_UViewerPath, 2, 0);
             this.TBL_CnfOptions.Controls.Add(this.BTN_NoesisPath, 2, 1);
             this.TBL_CnfOptions.Controls.Add(this.BTN_TempFolderPath, 2, 2);
+            this.TBL_CnfOptions.Controls.Add(this.BTN_GameFolderPath, 2, 3);
+            this.TBL_CnfOptions.Controls.Add(this.BTN_MaterialDBPath, 2, 4);
+            this.TBL_CnfOptions.Controls.Add(this.BTN_BlueprintDBPath, 2, 5);
             this.TBL_CnfOptions.Controls.Add(this.TXT_UVIewerPath, 1, 0);
             this.TBL_CnfOptions.Controls.Add(this.TXT_NoesisPath, 1, 1);
             this.TBL_CnfOptions.Controls.Add(this.TXT_TempFolderPath, 1, 2);
+            this.TBL_CnfOptions.Controls.Add(this.TXT_GameFolderPath, 1, 3);
+            this.TBL_CnfOptions.Controls.Add(this.TXT_MaterialDBPath, 1, 4);
+            this.TBL_CnfOptions.Controls.Add(this.TXT_BlueprintDBPath, 1, 5);
             this.TBL_CnfOptions.Controls.Add(this.LBL_UModelViewPath, 0, 0);
             this.TBL_CnfOptions.Controls.Add(this.LBL_NoesisPath, 0, 1);
             this.TBL_CnfOptions.Controls.Add(this.LBL_TempFolderPath, 0, 2);
+            this.TBL_CnfOptions.Controls.Add(this.LBL_CnfGameFolder, 0, 3);
+            this.TBL_CnfOptions.Controls.Add(this.LBL_MaterialDBPath, 0, 4);
+            this.TBL_CnfOptions.Controls.Add(this.LBL_BlueprintDBPath, 0, 5);
             this.TBL_CnfOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.TBL_CnfOptions.Location = new System.Drawing.Point(3, 3);
             this.TBL_CnfOptions.Name = "TBL_CnfOptions";
-            this.TBL_CnfOptions.RowCount = 3;
-            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.TBL_CnfOptions.Size = new System.Drawing.Size(766, 151);
+            this.TBL_CnfOptions.RowCount = 6;
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.TBL_CnfOptions.Size = new System.Drawing.Size(766, 340);
             this.TBL_CnfOptions.TabIndex = 0;
             // 
             // BTN_UViewerPath
             // 
+            this.BTN_UViewerPath.BackgroundImage = global::KH3MapsExporter.Properties.Resources.gfolderico;
             this.BTN_UViewerPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BTN_UViewerPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BTN_UViewerPath.Location = new System.Drawing.Point(712, 4);
             this.BTN_UViewerPath.Name = "BTN_UViewerPath";
-            this.BTN_UViewerPath.Size = new System.Drawing.Size(50, 43);
+            this.BTN_UViewerPath.Size = new System.Drawing.Size(50, 49);
             this.BTN_UViewerPath.TabIndex = 0;
             this.BTN_UViewerPath.UseVisualStyleBackColor = true;
             this.BTN_UViewerPath.Click += new System.EventHandler(this.BTN_UViewerPath_Click);
             // 
             // BTN_NoesisPath
             // 
+            this.BTN_NoesisPath.BackgroundImage = global::KH3MapsExporter.Properties.Resources.gfolderico;
             this.BTN_NoesisPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BTN_NoesisPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BTN_NoesisPath.Location = new System.Drawing.Point(712, 54);
+            this.BTN_NoesisPath.Location = new System.Drawing.Point(712, 60);
             this.BTN_NoesisPath.Name = "BTN_NoesisPath";
-            this.BTN_NoesisPath.Size = new System.Drawing.Size(50, 43);
+            this.BTN_NoesisPath.Size = new System.Drawing.Size(50, 49);
             this.BTN_NoesisPath.TabIndex = 1;
             this.BTN_NoesisPath.UseVisualStyleBackColor = true;
             this.BTN_NoesisPath.Click += new System.EventHandler(this.BTN_NoesisPath_Click);
             // 
             // BTN_TempFolderPath
             // 
+            this.BTN_TempFolderPath.BackgroundImage = global::KH3MapsExporter.Properties.Resources.gfolderico;
             this.BTN_TempFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BTN_TempFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BTN_TempFolderPath.Location = new System.Drawing.Point(712, 104);
+            this.BTN_TempFolderPath.Location = new System.Drawing.Point(712, 116);
             this.BTN_TempFolderPath.Name = "BTN_TempFolderPath";
-            this.BTN_TempFolderPath.Size = new System.Drawing.Size(50, 43);
+            this.BTN_TempFolderPath.Size = new System.Drawing.Size(50, 49);
             this.BTN_TempFolderPath.TabIndex = 2;
             this.BTN_TempFolderPath.UseVisualStyleBackColor = true;
             this.BTN_TempFolderPath.Click += new System.EventHandler(this.BTN_TempFolderPath_Click);
             // 
+            // BTN_GameFolderPath
+            // 
+            this.BTN_GameFolderPath.BackgroundImage = global::KH3MapsExporter.Properties.Resources.gfolderico;
+            this.BTN_GameFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_GameFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BTN_GameFolderPath.Location = new System.Drawing.Point(712, 172);
+            this.BTN_GameFolderPath.Name = "BTN_GameFolderPath";
+            this.BTN_GameFolderPath.Size = new System.Drawing.Size(50, 49);
+            this.BTN_GameFolderPath.TabIndex = 7;
+            this.BTN_GameFolderPath.UseVisualStyleBackColor = true;
+            this.BTN_GameFolderPath.Click += new System.EventHandler(this.BTN_GameFolderPath_Click);
+            // 
+            // BTN_MaterialDBPath
+            // 
+            this.BTN_MaterialDBPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BTN_MaterialDBPath.BackgroundImage")));
+            this.BTN_MaterialDBPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.BTN_MaterialDBPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BTN_MaterialDBPath.Location = new System.Drawing.Point(712, 228);
+            this.BTN_MaterialDBPath.Name = "BTN_MaterialDBPath";
+            this.BTN_MaterialDBPath.Size = new System.Drawing.Size(50, 49);
+            this.BTN_MaterialDBPath.TabIndex = 8;
+            this.BTN_MaterialDBPath.Click += new System.EventHandler(this.BTN_MaterialDBPath_Click);
+            // 
+            // BTN_BlueprintDBPath
+            // 
+            this.BTN_BlueprintDBPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BTN_BlueprintDBPath.BackgroundImage")));
+            this.BTN_BlueprintDBPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.BTN_BlueprintDBPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BTN_BlueprintDBPath.Location = new System.Drawing.Point(712, 284);
+            this.BTN_BlueprintDBPath.Name = "BTN_BlueprintDBPath";
+            this.BTN_BlueprintDBPath.Size = new System.Drawing.Size(50, 52);
+            this.BTN_BlueprintDBPath.TabIndex = 9;
+            this.BTN_BlueprintDBPath.Click += new System.EventHandler(this.BTN_BlueprintDBPath_Click);
+            // 
             // TXT_UVIewerPath
             // 
             this.TXT_UVIewerPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TXT_UVIewerPath.Location = new System.Drawing.Point(105, 21);
-            this.TXT_UVIewerPath.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
+            this.TXT_UVIewerPath.Location = new System.Drawing.Point(105, 4);
+            this.TXT_UVIewerPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.TXT_UVIewerPath.Name = "TXT_UVIewerPath";
             this.TXT_UVIewerPath.Size = new System.Drawing.Size(600, 20);
             this.TXT_UVIewerPath.TabIndex = 3;
@@ -221,8 +282,8 @@
             // TXT_NoesisPath
             // 
             this.TXT_NoesisPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TXT_NoesisPath.Location = new System.Drawing.Point(105, 71);
-            this.TXT_NoesisPath.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
+            this.TXT_NoesisPath.Location = new System.Drawing.Point(105, 60);
+            this.TXT_NoesisPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.TXT_NoesisPath.Name = "TXT_NoesisPath";
             this.TXT_NoesisPath.Size = new System.Drawing.Size(600, 20);
             this.TXT_NoesisPath.TabIndex = 4;
@@ -230,11 +291,38 @@
             // TXT_TempFolderPath
             // 
             this.TXT_TempFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TXT_TempFolderPath.Location = new System.Drawing.Point(105, 121);
-            this.TXT_TempFolderPath.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
+            this.TXT_TempFolderPath.Location = new System.Drawing.Point(105, 116);
+            this.TXT_TempFolderPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.TXT_TempFolderPath.Name = "TXT_TempFolderPath";
             this.TXT_TempFolderPath.Size = new System.Drawing.Size(600, 20);
             this.TXT_TempFolderPath.TabIndex = 5;
+            // 
+            // TXT_GameFolderPath
+            // 
+            this.TXT_GameFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TXT_GameFolderPath.Location = new System.Drawing.Point(105, 172);
+            this.TXT_GameFolderPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.TXT_GameFolderPath.Name = "TXT_GameFolderPath";
+            this.TXT_GameFolderPath.Size = new System.Drawing.Size(600, 20);
+            this.TXT_GameFolderPath.TabIndex = 6;
+            // 
+            // TXT_MaterialDBPath
+            // 
+            this.TXT_MaterialDBPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TXT_MaterialDBPath.Location = new System.Drawing.Point(105, 228);
+            this.TXT_MaterialDBPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.TXT_MaterialDBPath.Name = "TXT_MaterialDBPath";
+            this.TXT_MaterialDBPath.Size = new System.Drawing.Size(600, 20);
+            this.TXT_MaterialDBPath.TabIndex = 5;
+            // 
+            // TXT_BlueprintDBPath
+            // 
+            this.TXT_BlueprintDBPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TXT_BlueprintDBPath.Location = new System.Drawing.Point(105, 284);
+            this.TXT_BlueprintDBPath.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.TXT_BlueprintDBPath.Name = "TXT_BlueprintDBPath";
+            this.TXT_BlueprintDBPath.Size = new System.Drawing.Size(600, 20);
+            this.TXT_BlueprintDBPath.TabIndex = 5;
             // 
             // LBL_UModelViewPath
             // 
@@ -242,7 +330,7 @@
             this.LBL_UModelViewPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LBL_UModelViewPath.Location = new System.Drawing.Point(4, 1);
             this.LBL_UModelViewPath.Name = "LBL_UModelViewPath";
-            this.LBL_UModelViewPath.Size = new System.Drawing.Size(94, 49);
+            this.LBL_UModelViewPath.Size = new System.Drawing.Size(94, 55);
             this.LBL_UModelViewPath.TabIndex = 6;
             this.LBL_UModelViewPath.Text = "UViewer path:";
             this.LBL_UModelViewPath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -251,9 +339,9 @@
             // 
             this.LBL_NoesisPath.AutoSize = true;
             this.LBL_NoesisPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LBL_NoesisPath.Location = new System.Drawing.Point(4, 51);
+            this.LBL_NoesisPath.Location = new System.Drawing.Point(4, 57);
             this.LBL_NoesisPath.Name = "LBL_NoesisPath";
-            this.LBL_NoesisPath.Size = new System.Drawing.Size(94, 49);
+            this.LBL_NoesisPath.Size = new System.Drawing.Size(94, 55);
             this.LBL_NoesisPath.TabIndex = 7;
             this.LBL_NoesisPath.Text = "Noesis path:";
             this.LBL_NoesisPath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -262,12 +350,39 @@
             // 
             this.LBL_TempFolderPath.AutoSize = true;
             this.LBL_TempFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LBL_TempFolderPath.Location = new System.Drawing.Point(4, 101);
+            this.LBL_TempFolderPath.Location = new System.Drawing.Point(4, 113);
             this.LBL_TempFolderPath.Name = "LBL_TempFolderPath";
-            this.LBL_TempFolderPath.Size = new System.Drawing.Size(94, 49);
+            this.LBL_TempFolderPath.Size = new System.Drawing.Size(94, 55);
             this.LBL_TempFolderPath.TabIndex = 8;
             this.LBL_TempFolderPath.Text = "Temp folder:";
             this.LBL_TempFolderPath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LBL_CnfGameFolder
+            // 
+            this.LBL_CnfGameFolder.AutoSize = true;
+            this.LBL_CnfGameFolder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LBL_CnfGameFolder.Location = new System.Drawing.Point(4, 169);
+            this.LBL_CnfGameFolder.Name = "LBL_CnfGameFolder";
+            this.LBL_CnfGameFolder.Size = new System.Drawing.Size(94, 55);
+            this.LBL_CnfGameFolder.TabIndex = 9;
+            this.LBL_CnfGameFolder.Text = "Game folder:";
+            this.LBL_CnfGameFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LBL_MaterialDBPath
+            // 
+            this.LBL_MaterialDBPath.Location = new System.Drawing.Point(4, 225);
+            this.LBL_MaterialDBPath.Name = "LBL_MaterialDBPath";
+            this.LBL_MaterialDBPath.Size = new System.Drawing.Size(94, 23);
+            this.LBL_MaterialDBPath.TabIndex = 10;
+            this.LBL_MaterialDBPath.Text = "MaterialdDB:";
+            // 
+            // LBL_BlueprintDBPath
+            // 
+            this.LBL_BlueprintDBPath.Location = new System.Drawing.Point(4, 281);
+            this.LBL_BlueprintDBPath.Name = "LBL_BlueprintDBPath";
+            this.LBL_BlueprintDBPath.Size = new System.Drawing.Size(94, 23);
+            this.LBL_BlueprintDBPath.TabIndex = 11;
+            this.LBL_BlueprintDBPath.Text = "BlueprintDB:";
             // 
             // menuStrip1
             // 
@@ -292,14 +407,14 @@
             // scanFolderToolStripMenuItem
             // 
             this.scanFolderToolStripMenuItem.Name = "scanFolderToolStripMenuItem";
-            this.scanFolderToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.scanFolderToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.scanFolderToolStripMenuItem.Text = "Scan folder";
             this.scanFolderToolStripMenuItem.Click += new System.EventHandler(this.scanFolderToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -343,17 +458,26 @@
         private System.Windows.Forms.Button BTN_UViewerPath;
         private System.Windows.Forms.Button BTN_NoesisPath;
         private System.Windows.Forms.Button BTN_TempFolderPath;
+        private System.Windows.Forms.Button BTN_MaterialDBPath;
+        private System.Windows.Forms.Button BTN_BlueprintDBPath;
         private System.Windows.Forms.TextBox TXT_UVIewerPath;
         private System.Windows.Forms.TextBox TXT_NoesisPath;
         private System.Windows.Forms.TextBox TXT_TempFolderPath;
+        private System.Windows.Forms.TextBox TXT_MaterialDBPath;
+        private System.Windows.Forms.TextBox TXT_BlueprintDBPath;
         private System.Windows.Forms.Label LBL_UModelViewPath;
         private System.Windows.Forms.Label LBL_NoesisPath;
         private System.Windows.Forms.Label LBL_TempFolderPath;
+        private System.Windows.Forms.Label LBL_MaterialDBPath;
+        private System.Windows.Forms.Label LBL_BlueprintDBPath;
         private System.Windows.Forms.ToolStripMenuItem scanFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TreeView TRV_Maps;
         private System.Windows.Forms.ComboBox CMB_MapsIDsList;
+        private System.Windows.Forms.Label LBL_CnfGameFolder;
+        private System.Windows.Forms.Button BTN_GameFolderPath;
+        private System.Windows.Forms.TextBox TXT_GameFolderPath;
     }
 }
 

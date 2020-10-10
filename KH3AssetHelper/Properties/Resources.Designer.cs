@@ -92,5 +92,52 @@ namespace KH3AssetHelper.Properties {
                 return ResourceManager.GetString("BlenderScript_ASCII2FBX", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to import os
+        ///import bpy
+        ///import sys
+        ///import math
+        ///
+        ///from bpy.props import *
+        ///
+        ///if &apos;--&apos; in sys.argv:
+        ///    argv = sys.argv[sys.argv.index(&apos;--&apos;) + 1:]
+        ///
+        ///print(argv)
+        ///
+        ///srcPath=argv[0]
+        ///dstPath=argv[1]
+        ///pluginPath=argv[2]
+        ///
+        ///print(&quot;srcPath: &quot; + srcPath)
+        ///print(&quot;dstPath: &quot; + dstPath)
+        ///print(&quot;pluginPath: &quot; + pluginPath)
+        ///
+        ///context = bpy.context
+        ///scene = context.scene
+        ///
+        ///sys.path.append(pluginPath)
+        ///from pskpsab280 import *
+        ///
+        ///#clear the scene
+        ///for c in scene.collection.children:
+        ///    scene.collection.children.unli [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string BlenderScript_PSK2FBX {
+            get {
+                return ResourceManager.GetString("BlenderScript_PSK2FBX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] pskpsab280 {
+            get {
+                object obj = ResourceManager.GetObject("pskpsab280", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
